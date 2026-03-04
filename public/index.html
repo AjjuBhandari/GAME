@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>FreePlayZone — Free PC Games</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#0c0c0d;--bg2:#131315;--bg3:#18181b;
+  --sur:#1f1f23;--sur2:#27272c;
+  --line:rgba(255,255,255,0.06);--line2:rgba(255,255,255,0.11);
+  --t1:#ededef;--t2:#8e8e9e;--t3:#4a4a58;
+  --red:#e8443a;--grn:#34c77b;--blu:#4a8ef5;--yel:#f0b429;
+  --r:6px;--r2:10px;--r3:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t1);font-family:'DM Sans',sans-serif;font-weight:400;line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font-family:'DM Sans',sans-serif;cursor:pointer}
+img{display:block}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--sur2);border-radius:3px}
+.pg{display:none;min-height:calc(100vh - 56px)}
+.pg.on{display:block}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:900;height:56px;display:flex;align-items:center;background:rgba(12,12,13,0.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--line)}
+.nav-c{width:100%;max-width:1260px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:4px}
+.logo{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;letter-spacing:-.02em;color:var(--t1);cursor:pointer;margin-right:10px;flex-shrink:0}
+.logo b{color:var(--red)}
+.nav-a{display:flex;align-items:center;padding:6px 11px;border-radius:var(--r);font-size:.83rem;font-weight:500;color:var(--t2);background:none;border:none;cursor:pointer;transition:color .12s,background .12s;white-space:nowrap}
+.nav-a:hover{color:var(--t1);background:var(--sur)}
+.nav-sep{flex:1}
+.nav-yt{display:flex;align-items:center;gap:7px;padding:6px 13px;border-radius:var(--r);background:var(--sur);border:1px solid var(--line2);font-size:.82rem;font-weight:500;color:var(--t2);transition:all .12s;white-space:nowrap}
+.nav-yt:hover{color:var(--t1);border-color:rgba(255,255,255,.18)}
+.yt-dot{width:6px;height:6px;background:#ff3b3b;border-radius:50%;flex-shrink:0}
+.nav-admin{padding:6px 13px;border-radius:var(--r);background:none;border:1px solid var(--line2);font-size:.82rem;font-weight:500;color:var(--t3);transition:all .12s;margin-left:4px}
+.nav-admin:hover{color:var(--t2);border-color:rgba(255,255,255,.18);background:var(--sur)}
+.nav-dash{padding:6px 13px;border-radius:var(--r);background:var(--red);border:none;font-size:.82rem;font-weight:600;color:#fff;transition:background .12s;margin-left:4px;display:none}
+.nav-dash:hover{background:#d03830}
+
+/* HERO */
+.hero{max-width:1260px;margin:0 auto;padding:64px 24px 48px;display:grid;grid-template-columns:1fr 380px;gap:48px;align-items:start}
+.hero-label{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-bottom:18px}
+.hero-label-bar{width:20px;height:1.5px;background:var(--red)}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:800;line-height:1.06;letter-spacing:-.03em;color:#fff;margin-bottom:16px}
+.hero h1 i{font-style:normal;color:var(--red)}
+.hero-p{font-size:.95rem;color:var(--t2);line-height:1.75;max-width:460px;margin-bottom:30px}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;font-weight:600;border-radius:var(--r);transition:all .12s;font-size:.85rem;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.btn-red{background:var(--red);color:#fff;padding:9px 20px}
+.btn-red:hover{background:#d03830;transform:translateY(-1px)}
+.btn-ghost{background:var(--sur);color:var(--t1);padding:9px 20px;border:1px solid var(--line2)}
+.btn-ghost:hover{background:var(--sur2)}
+.hero-card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r3);overflow:hidden}
+.hc-yt{padding:22px;border-bottom:1px solid var(--line)}
+.hc-tag{font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.hc-tag::before{content:'';width:5px;height:5px;background:#ff3b3b;border-radius:50%}
+.hc-name{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:6px}
+.hc-desc{font-size:.82rem;color:var(--t2);line-height:1.6;margin-bottom:14px}
+.btn-yt{display:inline-flex;align-items:center;gap:7px;background:#ff3b3b;color:#fff;padding:8px 16px;border-radius:var(--r);font-size:.8rem;font-weight:600;transition:background .12s}
+.btn-yt:hover{background:#e02e2e}
+.btn-yt svg{width:14px;height:14px;fill:#fff}
+.hc-stats{display:grid;grid-template-columns:1fr 1fr}
+.hc-stat{padding:14px 18px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.hc-stat:nth-child(even){border-right:none}
+.hc-stat:nth-child(3),.hc-stat:nth-child(4){border-bottom:none}
+.hc-stat-n{font-family:'DM Mono',monospace;font-size:1.2rem;color:#fff;margin-bottom:2px}
+.hc-stat-l{font-size:.68rem;color:var(--t3);font-weight:500;letter-spacing:.03em}
+
+/* SEARCH */
+.search-sec{max-width:1260px;margin:0 auto;padding:0 24px 28px}
+.search-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.search-box{flex:1;min-width:200px;display:flex;align-items:center;background:var(--bg2);border:1px solid var(--line2);border-radius:var(--r2);overflow:hidden;transition:border-color .15s}
+.search-box:focus-within{border-color:rgba(232,68,58,.45)}
+.s-ico{padding:0 13px;flex-shrink:0;display:flex;align-items:center}
+.s-ico svg{width:15px;height:15px;stroke:var(--t3);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.s-inp{flex:1;background:none;border:none;outline:none;padding:11px 0;color:var(--t1);font-family:'DM Sans',sans-serif;font-size:.88rem}
+.s-inp::placeholder{color:var(--t3)}
+.s-clear{padding:0 13px;background:none;border:none;color:var(--t3);font-size:1rem;cursor:pointer;display:none;transition:color .12s;line-height:1}
+.s-clear:hover{color:var(--t1)}
+.s-cnt{padding:0 13px;font-family:'DM Mono',monospace;font-size:.72rem;color:var(--t3);border-left:1px solid var(--line);height:42px;display:flex;align-items:center;white-space:nowrap}
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{padding:6px 13px;border-radius:20px;background:var(--sur);border:1px solid var(--line2);font-size:.78rem;font-weight:500;color:var(--t2);cursor:pointer;transition:all .12s;white-space:nowrap}
+.pill:hover,.pill.on{background:var(--red);border-color:transparent;color:#fff}
+
+/* SECTION */
+.sec{max-width:1260px;margin:0 auto;padding:0 24px 64px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.sec-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;letter-spacing:-.01em;color:#fff}
+.sec-meta{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--t3)}
+
+/* GAME CARDS */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r3);overflow:hidden}
+.card{background:var(--bg2);display:flex;flex-direction:column;transition:background .15s;position:relative}
+.card:hover{background:var(--bg3)}
+.card-img{position:relative;width:100%;padding-top:56.25%;overflow:hidden;background:var(--bg3);flex-shrink:0}
+.card-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.card:hover .card-img img{transform:scale(1.03)}
+.card-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--bg3),var(--sur))}
+.card-ph-icon{font-size:2rem;opacity:.25;margin-bottom:6px}
+.card-ph-txt{font-size:.7rem;color:var(--t3);font-weight:500}
+.bdg{position:absolute;top:10px;left:10px;font-size:.62rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 8px;border-radius:4px;pointer-events:none}
+.bdg-free{background:var(--grn);color:#08200f}
+.bdg-hot{background:var(--red);color:#fff}
+.bdg-new{background:var(--blu);color:#fff}
+.expires-badge{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.7);color:var(--yel);font-size:.62rem;font-weight:600;padding:3px 8px;border-radius:4px;letter-spacing:.03em}
+.card-body{padding:15px;flex:1;display:flex;flex-direction:column;gap:8px}
+.card-title{font-family:'Syne',sans-serif;font-size:.92rem;font-weight:700;color:#fff;letter-spacing:-.01em;line-height:1.3}
+.card-desc{font-size:.8rem;color:var(--t2);line-height:1.55;flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-tags{display:flex;gap:5px;flex-wrap:wrap}
+.tag{font-size:.67rem;font-weight:500;padding:3px 8px;border-radius:4px;background:var(--sur);color:var(--t3);border:1px solid var(--line)}
+.card-foot{padding:11px 15px;border-top:1px solid var(--line);display:flex;align-items:center;gap:8px}
+.dl-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 14px;border-radius:var(--r);background:var(--red);color:#fff;font-size:.78rem;font-weight:600;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .12s;text-decoration:none}
+.dl-btn:hover{background:#d03830}
+.dl-btn svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.dl-size{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--t3);flex-shrink:0}
+.empty{grid-column:1/-1;padding:72px 24px;text-align:center;background:var(--bg2)}
+.empty svg{width:40px;height:40px;stroke:var(--t3);fill:none;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round;margin:0 auto 16px}
+.empty h3{font-size:.95rem;color:var(--t2);font-weight:600;margin-bottom:6px}
+.empty p{font-size:.82rem;color:var(--t3);line-height:1.7}
+.empty a{color:var(--red)}
+.no-res{grid-column:1/-1;padding:48px 24px;text-align:center;background:var(--bg2)}
+.no-res p{font-size:.9rem;color:var(--t3)}
+.no-res b{color:var(--t2)}
+
+/* LOADING SPINNER */
+.spinner-wrap{grid-column:1/-1;padding:60px;display:flex;justify-content:center}
+.spinner{width:32px;height:32px;border:2px solid var(--sur2);border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* HOW IT WORKS */
+.steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r3);overflow:hidden}
+.step{background:var(--bg2);padding:26px 22px}
+.step-n{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--t3);font-weight:500;letter-spacing:.06em;margin-bottom:12px}
+.step h3{font-size:.9rem;font-weight:700;color:#fff;margin-bottom:8px}
+.step p{font-size:.8rem;color:var(--t2);line-height:1.65}
+.step a{color:var(--red)}
+
+/* FOOTER */
+.ft{border-top:1px solid var(--line);padding:28px 24px}
+.ft-in{max-width:1260px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.ft-logo{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:800;color:var(--t2);letter-spacing:-.01em}
+.ft-logo span{color:var(--red)}
+.ft-note{font-size:.78rem;color:var(--t3)}
+.ft-note a{color:var(--red)}
+.ft-links{display:flex;gap:18px}
+.ft-links a{font-size:.78rem;color:var(--t3);transition:color .12s}
+.ft-links a:hover{color:var(--t2)}
+
+/* AUTH */
+.auth-pg{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 56px);padding:40px 20px}
+.auth-box{width:100%;max-width:390px;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r3);padding:36px;position:relative;overflow:hidden}
+.auth-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--red)}
+.auth-ico{width:40px;height:40px;border-radius:var(--r);background:var(--sur);display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.auth-ico svg{width:18px;height:18px;stroke:var(--t2);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.auth-box h2{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;color:#fff;margin-bottom:4px;letter-spacing:-.02em}
+.auth-sub{font-size:.83rem;color:var(--t3);margin-bottom:26px}
+.auth-err{background:rgba(232,68,58,.08);border:1px solid rgba(232,68,58,.2);border-radius:var(--r);padding:10px 13px;font-size:.8rem;color:var(--red);margin-bottom:14px;display:none}
+.f-field{margin-bottom:14px}
+.f-label{display:block;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:7px}
+.f-inp,.f-sel,.f-ta{width:100%;background:var(--bg3);border:1px solid var(--line2);border-radius:var(--r);padding:10px 13px;color:var(--t1);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;transition:border-color .15s;appearance:none}
+.f-inp:focus,.f-sel:focus,.f-ta:focus{border-color:rgba(232,68,58,.45)}
+.f-inp::placeholder,.f-ta::placeholder{color:var(--t3)}
+.f-sel option{background:var(--bg2)}
+.f-ta{resize:vertical;min-height:80px}
+.auth-btn{width:100%;padding:11px;border-radius:var(--r);background:var(--red);color:#fff;font-weight:700;font-size:.88rem;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .12s}
+.auth-btn:hover{background:#d03830}
+.auth-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* ADMIN */
+.adm-wrap{display:flex;min-height:calc(100vh - 56px)}
+.adm-side{width:210px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:16px 0}
+.adm-sec-lbl{font-size:.64rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;padding:0 14px 8px;margin-top:10px}
+.si{display:flex;align-items:center;gap:9px;padding:9px 14px;font-size:.84rem;font-weight:500;color:var(--t2);cursor:pointer;transition:all .12s;border-left:2px solid transparent;user-select:none}
+.si:hover{color:var(--t1);background:var(--bg3)}
+.si.on{color:var(--t1);border-left-color:var(--red);background:rgba(232,68,58,.06)}
+.si svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.adm-bottom{margin-top:auto;padding:14px}
+.sl-out{width:100%;padding:9px 12px;border-radius:var(--r);background:var(--sur);border:1px solid var(--line);color:var(--t2);font-size:.8rem;font-weight:500;display:flex;align-items:center;gap:8px;transition:all .12s}
+.sl-out svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sl-out:hover{color:var(--red);border-color:rgba(232,68,58,.25);background:rgba(232,68,58,.05)}
+.adm-main{flex:1;padding:32px;overflow-y:auto;background:var(--bg)}
+.adm-head{margin-bottom:28px}
+.adm-head h2{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:4px;letter-spacing:-.02em}
+.adm-head p{font-size:.82rem;color:var(--t3)}
+.a-tab{display:none}
+.a-tab.on{display:block}
+.pub-card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r3);padding:26px;max-width:660px}
+.pub-card-title{font-size:.82rem;font-weight:700;color:#fff;margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+.pub-card-title svg{width:15px;height:15px;stroke:var(--t2);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.f-full{grid-column:1/-1}
+.uz{border:1.5px dashed var(--line2);border-radius:var(--r2);padding:24px 16px;text-align:center;cursor:pointer;transition:all .18s;position:relative;background:var(--bg3)}
+.uz:hover,.uz.drag{border-color:rgba(232,68,58,.4);background:rgba(232,68,58,.03)}
+.uz input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.uz-ico{font-size:1.6rem;margin-bottom:7px}
+.uz-txt{font-size:.82rem;color:var(--t2);margin-bottom:3px}
+.uz-hint{font-size:.72rem;color:var(--t3)}
+.uz-prev{margin-top:12px;display:none;position:relative}
+.uz-prev img{width:100%;max-height:150px;object-fit:cover;border-radius:var(--r);border:1px solid var(--line)}
+.uz-rm{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.75);border:none;color:#fff;font-size:.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .12s}
+.uz-rm:hover{background:var(--red)}
+.fuz{border:1.5px dashed var(--line2);border-radius:var(--r2);padding:16px;cursor:pointer;transition:all .18s;position:relative;background:var(--bg3);display:flex;align-items:center;gap:13px}
+.fuz:hover,.fuz.drag{border-color:rgba(74,142,245,.4);background:rgba(74,142,245,.03)}
+.fuz input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.fuz-ico{width:38px;height:38px;background:var(--sur);border-radius:var(--r);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fuz-ico svg{width:18px;height:18px;stroke:var(--blu);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.fuz-inf{flex:1;min-width:0}
+.fuz-t{font-size:.85rem;font-weight:600;color:var(--t1);margin-bottom:2px}
+.fuz-s{font-size:.73rem;color:var(--t3)}
+.fuz-ok{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--grn);margin-top:4px;display:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.f-actions{display:flex;gap:10px;margin-top:4px}
+.btn-pub{flex:1;padding:11px;border-radius:var(--r);background:var(--red);color:#fff;font-weight:700;font-size:.86rem;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .12s}
+.btn-pub:hover{background:#d03830}
+.btn-pub:disabled{opacity:.5;cursor:not-allowed}
+.btn-clr{padding:11px 18px;border-radius:var(--r);background:transparent;border:1px solid var(--line2);color:var(--t2);font-size:.86rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .12s}
+.btn-clr:hover{color:var(--t1);border-color:rgba(255,255,255,.18)}
+.progress-wrap{display:none;margin-top:14px}
+.progress-bar{height:4px;background:var(--sur);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--red);border-radius:2px;width:0;transition:width .2s}
+.progress-txt{font-size:.75rem;color:var(--t3);margin-top:6px;font-family:'DM Mono',monospace}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:20px}
+.stat-box{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r2);padding:18px}
+.stat-n{font-family:'DM Mono',monospace;font-size:1.8rem;color:#fff;margin-bottom:4px}
+.stat-l{font-size:.68rem;color:var(--t3);font-weight:500;letter-spacing:.05em;text-transform:uppercase}
+.break-card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r2);padding:20px;margin-top:16px}
+.break-card h4{font-size:.82rem;font-weight:600;color:var(--t2);margin-bottom:14px}
+.pb-r{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.pb-l{width:100px;font-size:.8rem;color:var(--t2);flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pb-trk{flex:1;height:3px;background:var(--sur);border-radius:2px;overflow:hidden}
+.pb-fill{height:100%;background:var(--red);border-radius:2px;transition:width .4s}
+.pb-v{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--t3);width:16px;text-align:right;flex-shrink:0}
+.tbl-card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r2);overflow:hidden}
+.mtbl{width:100%;border-collapse:collapse}
+.mtbl th{text-align:left;font-size:.68rem;font-weight:600;color:var(--t3);letter-spacing:.09em;text-transform:uppercase;padding:12px 14px;border-bottom:1px solid var(--line)}
+.mtbl td{padding:11px 14px;border-bottom:1px solid rgba(255,255,255,.03);font-size:.83rem;color:var(--t2);vertical-align:middle}
+.mtbl tr:last-child td{border-bottom:none}
+.mtbl tr:hover td{background:rgba(255,255,255,.015)}
+.t-img{width:48px;height:34px;object-fit:cover;border-radius:5px;background:var(--bg3)}
+.t-img-ph{width:48px;height:34px;background:var(--sur);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.9rem}
+.t-title{color:var(--t1);font-weight:600}
+.t-file{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--t3);max-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t-exp{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--yel)}
+.btn-del{padding:5px 11px;border-radius:5px;background:rgba(232,68,58,.07);border:1px solid rgba(232,68,58,.18);color:var(--red);font-size:.73rem;font-weight:600;cursor:pointer;transition:all .12s;font-family:'DM Sans',sans-serif}
+.btn-del:hover{background:rgba(232,68,58,.18)}
+.no-data{text-align:center;padding:44px;color:var(--t3);font-size:.85rem}
+.warn-box{background:rgba(240,180,41,.07);border:1px solid rgba(240,180,41,.2);border-radius:var(--r2);padding:14px 16px;display:flex;align-items:center;gap:10px;margin-bottom:20px;font-size:.83rem;color:var(--yel)}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;z-index:9999;display:none;align-items:center;gap:9px;padding:11px 17px;border-radius:var(--r2);font-size:.84rem;font-weight:500;backdrop-filter:blur(14px);box-shadow:0 8px 28px rgba(0,0,0,.5);max-width:340px}
+.t-ok{background:rgba(52,199,123,.09);border:1px solid rgba(52,199,123,.22);color:var(--grn)}
+.t-err{background:rgba(232,68,58,.09);border:1px solid rgba(232,68,58,.22);color:var(--red)}
+.t-inf{background:rgba(74,142,245,.09);border:1px solid rgba(74,142,245,.22);color:var(--blu)}
+
+@media(max-width:860px){
+  .hero{grid-template-columns:1fr;padding:40px 20px 36px}
+  .hero-card{display:none}
+  .sec,.search-sec{padding-left:20px;padding-right:20px}
+  .adm-side{width:50px}
+  .adm-sec-lbl,.si span,.adm-bottom .sl-out span{display:none}
+  .si{justify-content:center;padding:12px}
+  .adm-main{padding:20px 16px}
+  .f-row{grid-template-columns:1fr}
+  .f-full{grid-column:1}
+  .pills{display:none}
+  .ft-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-c">
+    <span class="logo" id="logoBtn">FreePlay<b>.</b>zone</span>
+    <button class="nav-a" id="navHome">Home</button>
+    <button class="nav-a" id="navGames">Games</button>
+    <div class="nav-sep"></div>
+    <a href="https://youtube.com/@pgnr_58" target="_blank" class="nav-yt">
+      <span class="yt-dot"></span>@pgnr_58
+    </a>
+    <button class="nav-admin" id="btnAdmin">Admin</button>
+    <button class="nav-dash" id="btnDash">Dashboard</button>
+  </div>
+</nav>
+
+<div class="toast" id="toast"><span id="toastTxt"></span></div>
+
+<!-- HOME -->
+<div class="pg on" id="pgHome">
+  <div class="hero">
+    <div>
+      <div class="hero-label"><span class="hero-label-bar"></span>100% Legit — No Surveys · No Malware</div>
+      <h1>Paid PC Games,<br>Now <i>Free.</i></h1>
+      <p class="hero-p">Hand-picked free game files uploaded directly by <strong>@pgnr_58</strong>. Every file is real — download, extract and play. No redirects, no surveys.</p>
+      <div class="hero-btns">
+        <button class="btn btn-red" id="heroBrowse">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Browse Games
+        </button>
+        <a href="https://youtube.com/@pgnr_58" target="_blank" class="btn btn-ghost">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Watch YouTube
+        </a>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="hc-yt">
+        <div class="hc-tag">YouTube Channel</div>
+        <div class="hc-name">@pgnr_58</div>
+        <div class="hc-desc">Free game alerts, gameplay, reviews and guides. Subscribe to never miss when a paid game goes free.</div>
+        <a href="https://youtube.com/@pgnr_58" target="_blank" class="btn-yt">
+          <svg viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6M21.56 7.17c-.25-.95-1-1.68-1.94-1.91C17.88 5 12 5 12 5s-5.88 0-7.62.26c-.94.23-1.69.96-1.94 1.91C2.18 8.9 2.18 12 2.18 12s0 3.1.26 4.83c.25.95 1 1.68 1.94 1.91C6.12 19 12 19 12 19s5.88 0 7.62-.26c.94-.23 1.69-.96 1.94-1.91.26-1.73.26-4.83.26-4.83s0-3.1-.26-4.83z"/></svg>
+          Subscribe
+        </a>
+      </div>
+      <div class="hc-stats">
+        <div class="hc-stat"><div class="hc-stat-n" id="heroN">0</div><div class="hc-stat-l">Games listed</div></div>
+        <div class="hc-stat"><div class="hc-stat-n">Free</div><div class="hc-stat-l">Always</div></div>
+        <div class="hc-stat"><div class="hc-stat-n">30d</div><div class="hc-stat-l">Stored per game</div></div>
+        <div class="hc-stat"><div class="hc-stat-n">0</div><div class="hc-stat-l">Surveys</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-sec" id="searchSec">
+    <div class="search-row">
+      <div class="search-box">
+        <div class="s-ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <input class="s-inp" id="sInp" type="text" placeholder="Search by title, genre or platform…" autocomplete="off" spellcheck="false"/>
+        <button class="s-clear" id="sClear">✕</button>
+        <div class="s-cnt" id="sCnt"></div>
+      </div>
+      <div class="pills" id="pillsWrap">
+        <span class="pill on" data-f="">All</span>
+        <span class="pill" data-f="Action">Action</span>
+        <span class="pill" data-f="RPG">RPG</span>
+        <span class="pill" data-f="FPS">FPS</span>
+        <span class="pill" data-f="Strategy">Strategy</span>
+        <span class="pill" data-f="Adventure">Adventure</span>
+        <span class="pill" data-f="Indie">Indie</span>
+        <span class="pill" data-f="Racing">Racing</span>
+        <span class="pill" data-f="Horror">Horror</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec" id="gamesSec">
+    <div class="sec-head">
+      <span class="sec-title">Free Games</span>
+      <span class="sec-meta" id="gameMeta">Loading…</span>
+    </div>
+    <div class="grid" id="gGrid">
+      <div class="spinner-wrap"><div class="spinner"></div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-title">How It Works</span></div>
+    <div class="steps">
+      <div class="step"><div class="step-n">Step 01</div><h3>Find a game</h3><p>Browse the listing above. Use search or filter by genre to find what you want.</p></div>
+      <div class="step"><div class="step-n">Step 02</div><h3>Click Download</h3><p>Hit Download — the real game file starts downloading from our server immediately.</p></div>
+      <div class="step"><div class="step-n">Step 03</div><h3>Extract &amp; play</h3><p>Unzip the file, follow instructions inside. Games are stored for 30 days then auto-removed.</p></div>
+      <div class="step"><div class="step-n">Step 04</div><h3>Get alerts</h3><p>Subscribe to <a href="https://youtube.com/@pgnr_58" target="_blank">@pgnr_58</a> to be first when new free games drop.</p></div>
+    </div>
+  </div>
+
+  <footer class="ft">
+    <div class="ft-in">
+      <div class="ft-logo">FreePlay<span>.</span>zone</div>
+      <p class="ft-note">Curated by <a href="https://youtube.com/@pgnr_58" target="_blank">@pgnr_58</a></p>
+      <div class="ft-links">
+        <a href="https://store.epicgames.com/en-US/free-games" target="_blank">Epic Games</a>
+        <a href="https://www.gog.com" target="_blank">GOG</a>
+        <a href="https://gaming.amazon.com" target="_blank">Prime Gaming</a>
+        <a href="https://itch.io/games/free" target="_blank">Itch.io</a>
+        <a href="https://youtube.com/@pgnr_58" target="_blank">YouTube</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- LOGIN -->
+<div class="pg" id="pgLogin">
+  <div class="auth-pg">
+    <div class="auth-box">
+      <div class="auth-ico"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+      <h2>Admin Access</h2>
+      <p class="auth-sub">Sign in to manage game listings</p>
+      <div class="auth-err" id="loginErr">Incorrect credentials. Please try again.</div>
+      <div class="f-field">
+        <label class="f-label">Username</label>
+        <input class="f-inp" id="lUser" type="text" placeholder="Enter username" autocomplete="off" spellcheck="false"/>
+      </div>
+      <div class="f-field">
+        <label class="f-label">Password</label>
+        <input class="f-inp" id="lPass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
+      </div>
+      <button class="auth-btn" id="loginBtn" onclick="doLogin()">Sign In</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div class="pg" id="pgAdmin">
+  <div class="adm-wrap">
+    <aside class="adm-side">
+      <div class="adm-sec-lbl">Content</div>
+      <div class="si on" id="si-pub" onclick="showTab('pub')">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span>Publish Game</span>
+      </div>
+      <div class="si" id="si-manage" onclick="showTab('manage')">
+        <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        <span>Manage Games</span>
+      </div>
+      <div class="si" id="si-stats" onclick="showTab('stats')">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span>Overview</span>
+      </div>
+      <div class="adm-bottom">
+        <button class="sl-out" onclick="doLogout()">
+          <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Log Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="adm-main">
+      <!-- PUBLISH -->
+      <div class="a-tab on" id="tab-pub">
+        <div class="adm-head"><h2>Publish a Game</h2><p>Upload cover + game file. Goes live instantly. Auto-deleted after 30 days.</p></div>
+        <div class="pub-card">
+          <div class="pub-card-title">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Game Listing
+          </div>
+          <div class="f-row">
+            <div class="f-field">
+              <label class="f-label">Game Title *</label>
+              <input class="f-inp" id="fTitle" type="text" placeholder="e.g. Cyberpunk 2077"/>
+            </div>
+            <div class="f-field">
+              <label class="f-label">Genre</label>
+              <select class="f-sel" id="fGenre">
+                <option value="">— Select —</option>
+                <option>Action</option><option>RPG</option><option>FPS</option>
+                <option>Strategy</option><option>Adventure</option><option>Racing</option>
+                <option>Horror</option><option>Indie</option><option>Puzzle</option>
+                <option>Sports</option><option>Simulation</option><option>Platformer</option>
+              </select>
+            </div>
+            <div class="f-field">
+              <label class="f-label">Platform / Source</label>
+              <select class="f-sel" id="fPlat">
+                <option value="">— Select —</option>
+                <option>Epic Games</option><option>GOG</option>
+                <option>Prime Gaming</option><option>Itch.io</option>
+                <option>Ubisoft Connect</option><option>Other</option>
+              </select>
+            </div>
+            <div class="f-field">
+              <label class="f-label">Badge</label>
+              <select class="f-sel" id="fBadge">
+                <option value="free">FREE</option>
+                <option value="hot">HOT</option>
+                <option value="new">NEW</option>
+              </select>
+            </div>
+            <div class="f-field f-full">
+              <label class="f-label">Description</label>
+              <textarea class="f-ta" id="fDesc" placeholder="Short description…"></textarea>
+            </div>
+            <div class="f-field f-full">
+              <label class="f-label">Cover Image (PNG/JPG/WEBP)</label>
+              <div class="uz" id="imgZone">
+                <input type="file" id="imgFile" accept="image/*"/>
+                <div class="uz-ico">🖼</div>
+                <div class="uz-txt">Click to upload cover image</div>
+                <div class="uz-hint">Max 5 MB · Recommended 800×500 px</div>
+                <div class="uz-prev" id="imgPrevWrap">
+                  <img id="imgPrev" src="" alt=""/>
+                  <button class="uz-rm" id="rmCoverBtn">✕</button>
+                </div>
+              </div>
+            </div>
+            <div class="f-field f-full">
+              <label class="f-label">Game File (ZIP / RAR / 7Z) *</label>
+              <div class="fuz" id="fileZone">
+                <input type="file" id="gameFile" accept=".zip,.rar,.7z"/>
+                <div class="fuz-ico">
+                  <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                </div>
+                <div class="fuz-inf">
+                  <div class="fuz-t">Upload game file</div>
+                  <div class="fuz-s">The file users will download · Max 10 GB</div>
+                  <div class="fuz-ok" id="fileOk"></div>
+                </div>
+              </div>
+            </div>
+            <div class="f-full">
+              <div class="progress-wrap" id="progressWrap">
+                <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                <div class="progress-txt" id="progressTxt">Uploading…</div>
+              </div>
+            </div>
+            <div class="f-actions f-full">
+              <button class="btn-pub" id="pubBtn" onclick="doPublish()">Publish Game</button>
+              <button class="btn-clr" onclick="clearForm()">Clear</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MANAGE -->
+      <div class="a-tab" id="tab-manage">
+        <div class="adm-head"><h2>Manage Games</h2><p>View and delete published listings. Games auto-delete after 30 days.</p></div>
+        <div class="tbl-card">
+          <table class="mtbl">
+            <thead>
+              <tr><th>Cover</th><th>Title</th><th>Genre</th><th>Platform</th><th>File</th><th>Expires</th><th>Delete</th></tr>
+            </thead>
+            <tbody id="adminTbl"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="a-tab" id="tab-stats">
+        <div class="adm-head"><h2>Overview</h2><p>Stats about your published listings.</p></div>
+        <div id="statsWrap">
+          <div class="spinner-wrap"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════
+   STATE
+══════════════════════════════════════════ */
+let loggedIn  = false;
+let searchQ   = '';
+let filterG   = '';
+let allGames  = [];
+let searchTimer;
+
+/* ══════════════════════════════════════════
+   API HELPERS
+══════════════════════════════════════════ */
+async function api(method, url, body) {
+  const opts = { method, credentials: 'include', headers: {} };
+  if (body && !(body instanceof FormData)) {
+    opts.headers['Content-Type'] = 'application/json';
+    opts.body = JSON.stringify(body);
+  } else if (body) {
+    opts.body = body;
+  }
+  const res = await fetch(url, opts);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Request failed');
+  return data;
+}
+
+/* ══════════════════════════════════════════
+   ROUTING
+══════════════════════════════════════════ */
+function showPage(id) {
+  if (id === 'pgAdmin' && !loggedIn) { showPage('pgLogin'); return; }
+  document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  window.scrollTo(0, 0);
+  if (id === 'pgAdmin') { loadAdminGames(); loadStats(); }
+}
+
+document.getElementById('logoBtn').onclick  = () => { showPage('pgHome'); window.scrollTo({top:0,behavior:'smooth'}); };
+document.getElementById('navHome').onclick   = () => { showPage('pgHome'); window.scrollTo({top:0,behavior:'smooth'}); };
+document.getElementById('navGames').onclick  = () => {
+  showPage('pgHome');
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    document.getElementById('searchSec').scrollIntoView({behavior:'smooth',block:'start'});
+  }));
+};
+document.getElementById('heroBrowse').onclick = () => {
+  document.getElementById('searchSec').scrollIntoView({behavior:'smooth',block:'start'});
+};
+document.getElementById('btnAdmin').onclick  = () => showPage('pgLogin');
+document.getElementById('btnDash').onclick   = () => showPage('pgAdmin');
+
+/* ══════════════════════════════════════════
+   AUTH
+══════════════════════════════════════════ */
+async function checkSession() {
+  try {
+    const d = await api('GET', '/api/me');
+    if (d.loggedIn) {
+      loggedIn = true;
+      document.getElementById('btnAdmin').style.display = 'none';
+      document.getElementById('btnDash').style.display  = 'block';
+    }
+  } catch(e) {}
+}
+
+async function doLogin() {
+  const u = document.getElementById('lUser').value.trim();
+  const p = document.getElementById('lPass').value;
+  if (!u || !p) { document.getElementById('loginErr').style.display='block'; return; }
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Signing in…';
+  try {
+    await api('POST', '/api/login', { username: u, password: p });
+    loggedIn = true;
+    document.getElementById('loginErr').style.display = 'none';
+    document.getElementById('lUser').value = '';
+    document.getElementById('lPass').value = '';
+    document.getElementById('btnAdmin').style.display = 'none';
+    document.getElementById('btnDash').style.display  = 'block';
+    showPage('pgAdmin');
+  } catch(e) {
+    document.getElementById('loginErr').style.display = 'block';
+    document.getElementById('loginErr').textContent = e.message || 'Incorrect credentials.';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Sign In';
+  }
+}
+
+async function doLogout() {
+  await api('POST', '/api/logout').catch(()=>{});
+  loggedIn = false;
+  document.getElementById('btnAdmin').style.display = 'block';
+  document.getElementById('btnDash').style.display  = 'none';
+  showPage('pgHome');
+}
+
+/* ══════════════════════════════════════════
+   SEARCH + FILTER
+══════════════════════════════════════════ */
+document.getElementById('sInp').addEventListener('input', function() {
+  searchQ = this.value.trim();
+  document.getElementById('sClear').style.display = searchQ ? 'block' : 'none';
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => loadGames(), 300);
+});
+
+document.getElementById('sClear').onclick = () => {
+  document.getElementById('sInp').value = '';
+  searchQ = '';
+  document.getElementById('sClear').style.display = 'none';
+  loadGames();
+};
+
+document.getElementById('pillsWrap').addEventListener('click', e => {
+  const pill = e.target.closest('.pill');
+  if (!pill) return;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('on'));
+  pill.classList.add('on');
+  filterG = pill.dataset.f;
+  loadGames();
+});
+
+/* ══════════════════════════════════════════
+   LOAD & RENDER GAMES (PUBLIC)
+══════════════════════════════════════════ */
+async function loadGames() {
+  const grid = document.getElementById('gGrid');
+  const meta = document.getElementById('gameMeta');
+  grid.innerHTML = '<div class="spinner-wrap"><div class="spinner"></div></div>';
+  try {
+    let url = '/api/games?';
+    if (searchQ) url += 'search=' + encodeURIComponent(searchQ) + '&';
+    if (filterG) url += 'genre='  + encodeURIComponent(filterG) + '&';
+    allGames = await api('GET', url);
+    const n = document.getElementById('heroN');
+    if (n) n.textContent = allGames.length;
+    renderGames(allGames);
+    meta.textContent = allGames.length + ' game' + (allGames.length !== 1 ? 's' : '');
+    document.getElementById('sCnt').textContent = (searchQ || filterG) && allGames.length ? allGames.length + ' result' + (allGames.length !== 1 ? 's' : '') : '';
+  } catch(e) {
+    grid.innerHTML = '<div class="empty"><h3>Could not load games</h3><p>' + esc(e.message) + '</p></div>';
+    meta.textContent = 'Error';
+  }
+}
+
+function renderGames(list) {
+  const grid = document.getElementById('gGrid');
+  if (!list.length) {
+    grid.innerHTML = `
+      <div class="empty">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        <h3>${searchQ || filterG ? 'No games match your search' : 'No games yet'}</h3>
+        <p>${searchQ || filterG ? 'Try a different search or filter.' : 'The admin hasn\'t published any games yet.<br>Subscribe to <a href="https://youtube.com/@pgnr_58" target="_blank">@pgnr_58</a> for alerts.'}</p>
+      </div>`;
+    return;
+  }
+  const bMap = {free:'bdg-free',hot:'bdg-hot',new:'bdg-new'};
+  const bTxt = {free:'FREE',hot:'HOT',new:'NEW'};
+  grid.innerHTML = list.map(g => `
+    <div class="card">
+      <div class="card-img">
+        ${g.cover_url
+          ? `<img src="${g.cover_url}" alt="${esc(g.title)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+          : ''}
+        <div class="card-ph" style="${g.cover_url ? 'display:none' : ''}">
+          <span class="card-ph-icon">🎮</span>
+          <span class="card-ph-txt">${esc(g.title)}</span>
+        </div>
+        <span class="bdg ${bMap[g.badge]||'bdg-free'}">${bTxt[g.badge]||'FREE'}</span>
+        ${g.days_left <= 7 ? `<span class="expires-badge">${g.days_left}d left</span>` : ''}
+      </div>
+      <div class="card-body">
+        <div class="card-title">${esc(g.title)}</div>
+        ${g.description ? `<div class="card-desc">${esc(g.description)}</div>` : ''}
+        <div class="card-tags">
+          ${g.genre    ? `<span class="tag">${esc(g.genre)}</span>`    : ''}
+          ${g.platform ? `<span class="tag">${esc(g.platform)}</span>` : ''}
+        </div>
+      </div>
+      <div class="card-foot">
+        <a href="/api/download/${g.id}" class="dl-btn" download>
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </a>
+        ${g.file_size ? `<span class="dl-size">${esc(g.file_size)}</span>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ══════════════════════════════════════════
+   IMAGE PREVIEW
+══════════════════════════════════════════ */
+document.getElementById('imgFile').addEventListener('change', function() {
+  const f = this.files[0];
+  if (!f) return;
+  if (f.size > 5*1024*1024) { showToast('Image must be under 5 MB','err'); this.value=''; return; }
+  const r = new FileReader();
+  r.onload = e => {
+    document.getElementById('imgPrev').src = e.target.result;
+    document.getElementById('imgPrevWrap').style.display = 'block';
+  };
+  r.readAsDataURL(f);
+});
+document.getElementById('rmCoverBtn').onclick = e => {
+  e.stopPropagation(); e.preventDefault();
+  document.getElementById('imgFile').value = '';
+  document.getElementById('imgPrevWrap').style.display = 'none';
+};
+
+document.getElementById('gameFile').addEventListener('change', function() {
+  const f = this.files[0];
+  if (!f) return;
+  const ok = document.getElementById('fileOk');
+  ok.textContent = '✓ ' + f.name + ' (' + fmtBytes(f.size) + ')';
+  ok.style.display = 'block';
+});
+
+/* ══════════════════════════════════════════
+   PUBLISH (XHR for upload progress)
+══════════════════════════════════════════ */
+function doPublish() {
+  const title    = document.getElementById('fTitle').value.trim();
+  const gameFile = document.getElementById('gameFile').files[0];
+  if (!title)    { showToast('Please enter a game title.','err'); return; }
+  if (!gameFile) { showToast('Please upload a game ZIP file.','err'); return; }
+
+  const fd = new FormData();
+  fd.append('title',       title);
+  fd.append('genre',       document.getElementById('fGenre').value);
+  fd.append('platform',    document.getElementById('fPlat').value);
+  fd.append('badge',       document.getElementById('fBadge').value);
+  fd.append('description', document.getElementById('fDesc').value.trim());
+  const coverFile = document.getElementById('imgFile').files[0];
+  if (coverFile) fd.append('cover', coverFile);
+  fd.append('gamefile', gameFile);
+
+  const btn   = document.getElementById('pubBtn');
+  const pw    = document.getElementById('progressWrap');
+  const pfill = document.getElementById('progressFill');
+  const ptxt  = document.getElementById('progressTxt');
+  btn.disabled = true;
+  pw.style.display = 'block';
+
+  const xhr = new XMLHttpRequest();
+  xhr.upload.onprogress = e => {
+    if (e.lengthComputable) {
+      const pct = Math.round(e.loaded / e.total * 100);
+      pfill.style.width = pct + '%';
+      ptxt.textContent  = 'Uploading… ' + pct + '%';
+    }
+  };
+  xhr.onload = () => {
+    btn.disabled = false;
+    pw.style.display = 'none';
+    pfill.style.width = '0';
+    try {
+      const d = JSON.parse(xhr.responseText);
+      if (xhr.status === 200 && d.ok) {
+        showToast('"' + title + '" is now live!');
+        clearForm();
+        loadGames();
+      } else {
+        showToast(d.error || 'Publish failed','err');
+      }
+    } catch(e) { showToast('Publish failed','err'); }
+  };
+  xhr.onerror = () => {
+    btn.disabled = false;
+    pw.style.display = 'none';
+    showToast('Network error — is the server running?','err');
+  };
+  xhr.open('POST', '/api/games');
+  xhr.withCredentials = true;
+  xhr.send(fd);
+}
+
+function clearForm() {
+  ['fTitle','fDesc'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('fGenre').value  = '';
+  document.getElementById('fPlat').value   = '';
+  document.getElementById('fBadge').value  = 'free';
+  document.getElementById('imgFile').value  = '';
+  document.getElementById('gameFile').value = '';
+  document.getElementById('imgPrevWrap').style.display = 'none';
+  document.getElementById('fileOk').style.display      = 'none';
+}
+
+/* ══════════════════════════════════════════
+   ADMIN — LOAD & RENDER TABLE
+══════════════════════════════════════════ */
+async function loadAdminGames() {
+  const tb = document.getElementById('adminTbl');
+  tb.innerHTML = '<tr><td colspan="7" class="no-data"><div class="spinner" style="margin:auto"></div></td></tr>';
+  try {
+    const games = await api('GET', '/api/games');
+    if (!games.length) {
+      tb.innerHTML = '<tr><td colspan="7" class="no-data">No games yet — publish one first.</td></tr>';
+      return;
+    }
+    const bMap = {free:'bdg-free',hot:'bdg-hot',new:'bdg-new'};
+    const bTxt = {free:'FREE',hot:'HOT',new:'NEW'};
+    tb.innerHTML = games.map(g => `
+      <tr>
+        <td>${g.cover_url ? `<img class="t-img" src="${g.cover_url}" alt=""/>` : `<div class="t-img-ph">🎮</div>`}</td>
+        <td class="t-title">${esc(g.title)}</td>
+        <td>${g.genre||'—'}</td>
+        <td>${g.platform||'—'}</td>
+        <td class="t-file" title="${esc(g.file_name)}">${esc(g.file_name)||'—'}</td>
+        <td class="t-exp">${g.days_left}d left</td>
+        <td><button class="btn-del" onclick="delGame(${g.id},'${esc(g.title)}')">Delete</button></td>
+      </tr>
+    `).join('');
+  } catch(e) {
+    tb.innerHTML = '<tr><td colspan="7" class="no-data">Error: ' + esc(e.message) + '</td></tr>';
+  }
+}
+
+async function delGame(id, title) {
+  if (!confirm('Delete "' + title + '"?\nThe file will be permanently removed from the server.')) return;
+  try {
+    await api('DELETE', '/api/games/' + id);
+    showToast('"' + title + '" deleted.');
+    loadAdminGames();
+    loadGames();
+  } catch(e) { showToast(e.message,'err'); }
+}
+
+/* ══════════════════════════════════════════
+   ADMIN TABS
+══════════════════════════════════════════ */
+function showTab(t) {
+  ['pub','manage','stats'].forEach(k => {
+    document.getElementById('tab-'+k).classList.toggle('on', k===t);
+    document.getElementById('si-'+k).classList.toggle('on', k===t);
+  });
+  if (t==='manage') loadAdminGames();
+  if (t==='stats')  loadStats();
+}
+
+/* ══════════════════════════════════════════
+   STATS
+══════════════════════════════════════════ */
+async function loadStats() {
+  const wrap = document.getElementById('statsWrap');
+  wrap.innerHTML = '<div class="spinner-wrap"><div class="spinner"></div></div>';
+  try {
+    const s = await api('GET', '/api/stats');
+    const byBadge = {};
+    s.byBadge.forEach(b => byBadge[b.badge] = b.n);
+    const expWarn = s.expiring > 0
+      ? `<div class="warn-box">⚠️ ${s.expiring} game${s.expiring>1?'s':''} expiring within 7 days.</div>`
+      : '';
+    const bars = s.byPlat.length
+      ? s.byPlat.map(p => {
+          const w = Math.round(p.n / s.total * 100);
+          return `<div class="pb-r"><span class="pb-l">${esc(p.platform)}</span><div class="pb-trk"><div class="pb-fill" style="width:${w}%"></div></div><span class="pb-v">${p.n}</span></div>`;
+        }).join('')
+      : '<p style="color:var(--t3);font-size:.82rem">No data yet.</p>';
+
+    wrap.innerHTML = `
+      ${expWarn}
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-n">${s.total}</div><div class="stat-l">Total</div></div>
+        <div class="stat-box"><div class="stat-n">${byBadge.free||0}</div><div class="stat-l">Free</div></div>
+        <div class="stat-box"><div class="stat-n">${byBadge.hot||0}</div><div class="stat-l">Hot</div></div>
+        <div class="stat-box"><div class="stat-n">${byBadge.new||0}</div><div class="stat-l">New</div></div>
+        <div class="stat-box"><div class="stat-n">${s.expiring}</div><div class="stat-l">Expiring Soon</div></div>
+      </div>
+      <div class="break-card"><h4>By Platform</h4>${bars}</div>`;
+  } catch(e) {
+    wrap.innerHTML = '<p style="color:var(--t3)">Error: ' + esc(e.message) + '</p>';
+  }
+}
+
+/* ══════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════ */
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function fmtBytes(b) {
+  if (b<1024) return b+' B';
+  if (b<1048576) return (b/1024).toFixed(1)+' KB';
+  if (b<1073741824) return (b/1048576).toFixed(1)+' MB';
+  return (b/1073741824).toFixed(2)+' GB';
+}
+let _tt;
+function showToast(msg, type='ok') {
+  const el = document.getElementById('toast');
+  el.className = 'toast ' + (type==='err'?'t-err':type==='inf'?'t-inf':'t-ok');
+  document.getElementById('toastTxt').textContent = msg;
+  el.style.display = 'flex';
+  clearTimeout(_tt);
+  _tt = setTimeout(() => el.style.display='none', 3500);
+}
+
+/* drag zones */
+['imgZone','fileZone'].forEach(zid => {
+  const z = document.getElementById(zid);
+  z.addEventListener('dragover', e => { e.preventDefault(); z.classList.add('drag'); });
+  z.addEventListener('dragleave', () => z.classList.remove('drag'));
+  z.addEventListener('drop', () => z.classList.remove('drag'));
+});
+
+/* INIT */
+checkSession().then(() => loadGames());
+</script>
+</body>
+</html>
