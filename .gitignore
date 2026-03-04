@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pyo
+*.db
+.env
+uploads/covers/*
+uploads/games/*
+!uploads/covers/.gitkeep
+!uploads/games/.gitkeep
+.DS_Store
+*.log
