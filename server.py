@@ -46,20 +46,26 @@ def init_db():
             game_file   TEXT NOT NULL,
             file_name   TEXT NOT NULL,
             file_size   TEXT,
-            created_at  TEXT DEFAULT (datetime("now")),
-            expires_at  TEXT DEFAULT (datetime("now","+30 days"))
+            created_at  TEXT,
+            expires_at  TEXT
         );
     ''')
-    # Create default admin if none
-    existing = conn.execute('SELECT id FROM admins WHERE username=?', ('pgnr_58',)).fetchone()
-    if not existing:
-        pw_hash = hashlib.sha256('admin123'.encode()).hexdigest()
-        conn.execute('INSERT INTO admins (username,password) VALUES (?,?)', ('pgnr_58', pw_hash))
     conn.commit()
     conn.close()
     print('✅ Database ready')
 
+def ensure_admin():
+    conn = get_db()
+    existing = conn.execute('SELECT id FROM admins WHERE username=?', ('pgnr_58',)).fetchone()
+    if not existing:
+        pw_hash = hashlib.sha256('admin123'.encode()).hexdigest()
+        conn.execute('INSERT INTO admins (username,password) VALUES (?,?)', ('pgnr_58', pw_hash))
+        conn.commit()
+    conn.close()
+    print('✅ Admin ready')
+
 init_db()
+ensure_admin()
 
 # ── HELPERS ─────────────────────────────────────────────────
 def fmt_bytes(size):
@@ -257,12 +263,14 @@ def publish_game():
             else:
                 cover_saved = cf_safe
 
+    now     = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    expires = (datetime.now() + timedelta(days=30)).strftime('%Y-%m-%d %H:%M:%S')
     conn = get_db()
     cur  = conn.execute(
-        '''INSERT INTO games (title,genre,platform,badge,description,cover_file,game_file,file_name,file_size)
-           VALUES (?,?,?,?,?,?,?,?,?)''',
+        '''INSERT INTO games (title,genre,platform,badge,description,cover_file,game_file,file_name,file_size,created_at,expires_at)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?)''',
         (title, genre or None, platform or None, badge, description or None,
-         cover_saved, gf_safe, gf.filename, fmt_bytes(gf_size))
+         cover_saved, gf_safe, gf.filename, fmt_bytes(gf_size), now, expires)
     )
     conn.commit()
     game = conn.execute('SELECT * FROM games WHERE id=?', (cur.lastrowid,)).fetchone()
