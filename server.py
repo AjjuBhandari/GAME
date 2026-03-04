@@ -369,6 +369,9 @@ def change_password():
     conn.close()
     return jsonify({'ok': True})
 
+# For gunicorn — expose app at module level
+application = app
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     is_prod = os.environ.get('RAILWAY_ENVIRONMENT') or os.environ.get('RENDER')
